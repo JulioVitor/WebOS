@@ -1,0 +1,241 @@
+ * {
+     margin: 0;
+     padding: 0;
+     box-sizing: border-box;
+     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+ }
+
+ body {
+     background: linear-gradient(135deg, #1a2a6c, #2b5876);
+     min-height: 100vh;
+     color: white;
+     padding: 20px;
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+ }
+
+ .os-container {
+     background-color: rgba(255, 255, 255, 0.95);
+     border-radius: 15px;
+     padding: 30px;
+     width: 100%;
+     max-width: 800px;
+     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+     color: #333;
+     margin-top: 20px;
+ }
+
+ h1 {
+     text-align: center;
+     margin-bottom: 10px;
+     color: #2c3e50;
+     font-size: 2.2rem;
+ }
+
+ p {
+     text-align: center;
+     margin-bottom: 25px;
+     color: #7f8c8d;
+ }
+
+ #os-form {
+     display: grid;
+     grid-template-columns: 1fr 1fr;
+     gap: 20px;
+ }
+
+ .form-group {
+     margin-bottom: 15px;
+ }
+
+ .form-group.full-width {
+     grid-column: span 2;
+ }
+
+ label {
+     display: block;
+     margin-bottom: 8px;
+     font-weight: 600;
+     color: #2c3e50;
+ }
+
+ input,
+ select,
+ textarea {
+     width: 100%;
+     padding: 14px;
+     border: 2px solid #ddd;
+     border-radius: 8px;
+     font-size: 16px;
+     transition: border-color 0.3s;
+ }
+
+ input:focus,
+ select:focus,
+ textarea:focus {
+     border-color: #3498db;
+     outline: none;
+     box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+ }
+
+ button {
+     background: linear-gradient(to right, #3498db, #2c3e50);
+     color: white;
+     border: none;
+     padding: 16px;
+     border-radius: 8px;
+     font-size: 18px;
+     font-weight: 600;
+     cursor: pointer;
+     transition: all 0.3s;
+     margin-top: 10px;
+ }
+
+ button:hover {
+     background: linear-gradient(to right, #2980b9, #1a252f);
+     transform: translateY(-2px);
+     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+ }
+
+ .btn-voltar {
+     background: #95a5a6;
+     text-decoration: none;
+     color: white;
+     padding: 12px 25px;
+     border-radius: 8px;
+     font-weight: 600;
+     display: inline-block;
+     text-align: center;
+     transition: all 0.3s;
+     margin-bottom: 20px;
+ }
+
+ .btn-voltar:hover {
+     background: #7f8c8d;
+     transform: translateY(-2px);
+ }
+
+ .actions {
+     display: flex;
+     justify-content: center;
+     gap: 15px;
+     margin-top: 20px;
+     grid-column: span 2;
+ }
+
+ /* Estilo para a OS impressa */
+ @media print {
+     body * {
+         visibility: hidden;
+     }
+
+     #os-print,
+     #os-print * {
+         visibility: visible;
+     }
+
+     #os-print {
+         position: absolute;
+         left: 0;
+         top: 0;
+         width: 100%;
+         padding: 20px;
+     }
+
+     .no-print {
+         display: none !important;
+     }
+ }
+
+ #os-print {
+     display: none;
+     background: white;
+     color: black;
+     padding: 30px;
+     border-radius: 10px;
+     margin-top: 30px;
+     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+     width: 100%;
+     max-width: 800px;
+ }
+
+ .print-header {
+     text-align: center;
+     margin-bottom: 20px;
+     border-bottom: 2px solid #3498db;
+     padding-bottom: 15px;
+ }
+
+ .print-section {
+     margin-bottom: 15px;
+ }
+
+ .print-label {
+     font-weight: bold;
+     display: inline-block;
+     width: 120px;
+ }
+
+ /* Mensagens do sistema */
+ .message {
+     padding: 15px;
+     border-radius: 8px;
+     margin: 15px 0;
+     text-align: center;
+     font-weight: 600;
+ }
+
+ .success {
+     background-color: #d4edda;
+     color: #155724;
+     border: 1px solid #c3e6cb;
+ }
+
+ .error {
+     background-color: #f8d7da;
+     color: #721c24;
+     border: 1px solid #f5c6cb;
+ }
+
+ /* Responsividade */
+ @media (max-width: 768px) {
+     #os-form {
+         grid-template-columns: 1fr;
+     }
+
+     .form-group.full-width {
+         grid-column: span 1;
+     }
+
+     .actions {
+         grid-column: span 1;
+         flex-direction: column;
+     }
+ }
+
+ /* Remove estilo padrão do navegador nos selects */
+select {
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    padding: 14px;
+    font-size: 16px;
+    background-color: #fff;
+    color: #333;
+    box-shadow: none;
+    outline: none;
+    appearance: auto; /* força a seta nativa */
+}
+
+/* Remove a seta padrão do select */
+select::-ms-expand {
+    display: none; /* Remove no IE/Edge antigo */
+}
+
+select::-webkit-calendar-picker-indicator,
+select::-webkit-inner-spin-button,
+select::-webkit-outer-spin-button {
+    display: none !important;
+    -webkit-appearance: none;
+    margin: 0;
+}
