@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="pt-br>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciamento de Loja - WebOS</title>
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+      <link rel="stylesheet" href="../style/gerencia.css"
+</head>
+<body>
+     <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <h2><i class="fas fa-mobile-alt"></i> Sistema OS</h2>
+            </div>
+            <ul class="menu">
+                <li><a href="dashboard.html"><i class="fas fa-home"></i> Dashboard</a></li>
+                <li><a href="#" class="active"><i class="fas fa-boxes"></i> Estoque</a></li>
+                <li><a href="#"><i class="fas fa-tools"></i> Ordens de Serviço</a></li>
+                <li><a href="#"><i class="fas fa-cash-register"></i> Vendas</a></li>
+                <li><a href="#"><i class="fas fa-users"></i> Clientes</a></li>
+                <li><a href="#"><i class="fas fa-user-cog"></i> Usuários</a></li>
+                <li><a href="#"><i class="fas fa-chart-bar"></i> Relatórios</a></li>
+                <li><a href="#"><i class="fas fa-cog"></i> Configurações</a></li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <div class="header">
+                <h1 class="page-title"><i class="fas fa-boxes"></i> Gestão de Estoque</h1>
+                <div class="user-info">
+                    <div class="user-details">
+                        <div class="user-name">Admin Administrador</div>
+                        <div class="user-role">Administrador</div>
+                    </div>
+                    <button class="logout-btn"><i class="fas fa-sign-out-alt"></i> Sair</button>
+                </div>
+            </div>
+
+            <!-- Dashboard Cards -->
+            <div class="dashboard-cards">
+                <div class="card">
+                    <div class="card-icon" style="background: rgba(52, 152, 219, 0.1); color: #3498db;">
+                        <i class="fas fa-boxes"></i>
+                    </div>
+                    <div class="card-title">Total de Itens</div>
+                    <div class="card-value">487</div>
+                    <div class="card-trend trend-up"><i class="fas fa-arrow-up"></i> 12% desde o mês passado</div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-icon" style="background: rgba(46, 204, 113, 0.1); color: #2ecc71;">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="card-title">Itens em Estoque</div>
+                    <div class="card-value">423</div>
+                    <div class="card-trend trend-up"><i class="fas fa-arrow-up"></i> 8% desde o mês passado</div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-icon" style="background: rgba(231, 76, 60, 0.1); color: #e74c3c;">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <div class="card-title">Itens com Estoque Baixo</div>
+                    <div class="card-value">24</div>
+                    <div class="card-trend trend-down"><i class="fas fa-arrow-down"></i> 3% desde o mês passado</div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-icon" style="background: rgba(243, 156, 18, 0.1); color: #f39c12;">
+                        <i class="fas fa-money-bill-wave"></i>
+                    </div>
+                    <div class="card-title">Valor Total em Estoque</div>
+                    <div class="card-value">R$ 28.745,00</div>
+                    <div class="card-trend trend-up"><i class="fas fa-arrow-up"></i> 5% desde o mês passado</div>
+                </div>
+            </div>
+
+            <!-- Filters -->
+            <div class="filters">
+                <div class="filter-group">
+                    <label for="category">Categoria</label>
+                    <select id="category">
+                        <option value="">Todas as categorias</option>
+                        <option value="capinha">Capinhas</option>
+                        <option value="pelicula">Películas</option>
+                        <option value="fone">Fones de Ouvido</option>
+                        <option value="carregador">Carregadores</option>
+                        <option value="peca">Peças</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label for="status">Status</label>
+                    <select id="status">
+                        <option value="">Todos os status</option>
+                        <option value="high">Estoque Alto</option>
+                        <option value="medium">Estoque Médio</option>
+                        <option value="low">Estoque Baixo</option>
+                        <option value="out">Esgotado</option>
+                    </select>
+                </div>
+                
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Buscar produto...">
+                </div>
+                
+                <button class="btn btn-primary" id="newProductBtn"><i class="fas fa-plus"></i> Novo Produto</button>
+            </div>
+
+            <!-- Table -->
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Código</th>
+                            <th>Produto</th>
+                            <th>Categoria</th>
+                            <th>Estoque</th>
+                            <th>Preço</th>
+                            <th>Status</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>ACP001</td>
+                            <td>Capinha iPhone 13 - Preto</td>
+                            <td>Capinhas</td>
+                            <td>42</td>
+                            <td>R$ 49,90</td>
+                            <td class="stock-high">Alto</td>
+                            <td>
+                                <button class="action-btn" style="background: #17a2b8; color: white;"><i class="fas fa-edit"></i></button>
+                                <button class="action-btn" style="background: #e74c3c; color: white;"><i class="fas fa-trash"></i></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>PEL008</td>
+                            <td>Película Samsung S22 - Cristal</td>
+                            <td>Películas</td>
+                            <td>15</td>
+                            <td>R$ 29,90</td>
+                            <td class="stock-medium">Médio</td>
+                            <td>
+                                <button class="action-btn" style="background: #17a2b8; color: white;"><i class="fas fa-edit"></i></button>
+                                <button class="action-btn" style="background: #e74c3c; color: white;"><i class="fas fa-trash"></i></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>FON012</td>
+                            <td>Fone Bluetooth TWS - Preto</td>
+                            <td>Fones de Ouvido</td>
+                            <td>3</td>
+                            <td>R$ 89,90</td>
+                            <td class="stock-low">Baixo</td>
+                            <td>
+                                <button class="action-btn" style="background: #17a2b8; color: white;"><i class="fas fa-edit"></i></button>
+                                <button class="action-btn" style="background: #e74c3c; color: white;"><i class="fas fa-trash"></i></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>CRG005</td>
+                            <td>Carregador Rápido 25W - USB-C</td>
+                            <td>Carregadores</td>
+                            <td>0</td>
+                            <td>R$ 59,90</td>
+                            <td class="stock-low">Esgotado</td>
+                            <td>
+                                <button class="action-btn" style="background: #17a2b8; color: white;"><i class="fas fa-edit"></i></button>
+                                <button class="action-btn" style="background: #e74c3c; color: white;"><i class="fas fa-trash"></i></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>PEC021</td>
+                            <td>Tela LCD iPhone 12 - Original</td>
+                            <td>Peças</td>
+                            <td>7</td>
+                            <td>R$ 349,90</td>
+                            <td class="stock-medium">Médio</td>
+                            <td>
+                                <button class="action-btn" style="background: #17a2b8; color: white;"><i class="fas fa-edit"></i></button>
+                                <button class="action-btn" style="background: #e74c3c; color: white;"><i class="fas fa-trash"></i></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal for New Product -->
+    <div class="modal" id="productModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title"><i class="fas fa-plus"></i> Adicionar Novo Produto</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="productCode">Código do Produto</label>
+                        <input type="text" id="productCode" placeholder="Ex: ACP001">
+                    </div>
+                    <div class="form-group">
+                        <label for="productCategory">Categoria</label>
+                        <select id="productCategory">
+                            <option value="">Selecione uma categoria</option>
+                            <option value="capinha">Capinhas</option>
+                            <option value="pelicula">Películas</option>
+                            <option value="fone">Fones de Ouvido</option>
+                            <option value="carregador">Carregadores</option>
+                            <option value="peca">Peças</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="productName">Nome do Produto</label>
+                    <input type="text" id="productName" placeholder="Ex: Capinha iPhone 13 - Preto">
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="productStock">Quantidade em Estoque</label>
+                        <input type="number" id="productStock" min="0" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="productMinStock">Estoque Mínimo</label>
+                        <input type="number" id="productMinStock" min="0" value="5">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="productCost">Preço de Custo</label>
+                        <input type="number" id="productCost" step="0.01" min="0" placeholder="R$">
+                    </div>
+                    <div class="form-group">
+                        <label for="productPrice">Preço de Venda</label>
+                        <input type="number" id="productPrice" step="0.01" min="0" placeholder="R$">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="productDescription">Descrição</label>
+                    <textarea id="productDescription" rows="3" placeholder="Descrição do produto..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" style="background: #6c757d; color: white;">Cancelar</button>
+                <button class="btn btn-success">Salvar Produto</button>
+            </div>
+        </div>
+    </div>
+<script src="../js/gerencia.js"></script>
+</body>
+</html>

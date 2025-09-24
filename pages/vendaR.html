@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebOS - Vendas Rápidas</title>
+    <link rel="stylesheet" href="../style/styleVendas.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1>💳 Vendas Rápidas</h1>
+            <div class="header-actions">
+                <span id="user-name">Usuário</span>
+                <button id="btn-voltar" class="btn-secondary">← Voltar</button>
+                <button id="btn-sair" class="btn-secondary">Sair</button>
+            </div>
+        </header>
+
+        <!-- Área principal -->
+        <div class="main-content">
+            <!-- Formulário de venda -->
+            <div class="venda-form">
+                <h2>Nova Venda</h2>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="produto">Produto/Serviço *</label>
+                        <input type="text" id="produto" placeholder="Ex: Película, Capa, Carregador" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="quantidade">Quantidade</label>
+                        <input type="number" id="quantidade" value="1" min="1">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="preco-unitario">Preço Unitário (R$) *</label>
+                        <input type="number" id="preco-unitario" step="0.01" min="0" placeholder="0,00" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="preco-total">Preço Total (R$)</label>
+                        <input type="text" id="preco-total" readonly value="0,00">
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button id="btn-adicionar" class="btn-primary">+ Adicionar Item</button>
+                    <button id="btn-finalizar" class="btn-success">Finalizar Venda</button>
+                    <button id="btn-cancelar" class="btn-secondary">Cancelar</button>
+                </div>
+            </div>
+
+            <!-- Lista de itens -->
+            <div class="itens-venda">
+                <h2>Itens da Venda</h2>
+                <div id="lista-itens" class="itens-list">
+                    <div class="empty-state">
+                        <p>Nenhum item adicionado</p>
+                    </div>
+                </div>
+                
+                <div class="resumo-venda">
+                    <div class="total-line">
+                        <span>Subtotal:</span>
+                        <span id="subtotal">R$ 0,00</span>
+                    </div>
+                    <div class="total-line">
+                        <span>Total:</span>
+                        <span id="total">R$ 0,00</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal de pagamento -->
+        <div id="modal-pagamento" class="modal">
+            <div class="modal-content">
+                <h2>Finalizar Venda</h2>
+                
+                <div class="pagamento-info">
+                    <div class="total-final">
+                        <span>Total a pagar:</span>
+                        <span id="total-pagar">R$ 0,00</span>
+                    </div>
+                    
+                    <div class="forma-pagamento">
+                        <label>Forma de Pagamento:</label>
+                        <select id="metodo-pagamento">
+                            <option value="dinheiro">Dinheiro</option>
+                            <option value="pix">PIX</option>
+                            <option value="debito">Cartão Débito</option>
+                            <option value="credito">Cartão Crédito</option>
+                        </select>
+                    </div>
+                    
+                    <div class="valor-recebido" id="valor-recebido-container">
+                        <label for="valor-recebido">Valor Recebido (R$)</label>
+                        <input type="number" id="valor-recebido" step="0.01" min="0" placeholder="0,00">
+                    </div>
+                    
+                    <div class="troco" id="troco-container">
+                        <span>Troco:</span>
+                        <span id="troco">R$ 0,00</span>
+                    </div>
+                </div>
+                
+                <div class="modal-actions">
+                    <button id="btn-cancelar-venda" class="btn-secondary">Cancelar</button>
+                    <button id="btn-confirmar-venda" class="btn-success">Confirmar Venda</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal de sucesso -->
+        <div id="modal-sucesso" class="modal">
+            <div class="modal-content">
+                <div class="sucesso-icon">✅</div>
+                <h2>Venda Concluída!</h2>
+                <p id="mensagem-sucesso">Venda registrada com sucesso.</p>
+                <div class="modal-actions">
+                    <button id="btn-nova-venda" class="btn-primary">Nova Venda</button>
+                    <button id="btn-imprimir" class="btn-secondary">Imprimir</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/scriptVendas.js"></script>
+</body>
+</html>

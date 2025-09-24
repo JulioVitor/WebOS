@@ -5,39 +5,463 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WebOS - Notas de serviço e Gestão Simplificados</title>
     <link rel="stylesheet" href="./style/style.css">
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <h1>Bem Vindo ao WebOS</h1>
-    <header>
-        <div class="btn-novaOS" id="btn-novaOS">
-            <button type="submit">Nova OS
-                 <span class="btn-text">Abrir formulário para nova ordem de serviço</span>
-                <span class="btn-icon">📋</span>
+   <!-- Overlay -->
+    <div class="overlay" id="overlay"></div>
+    
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <h1><i class="fas fa-desktop"></i> Web<span>OS</span></h1>
+        </div>
+        
+        <div class="menu">
+            <div class="menu-section">
+                <div class="menu-title">Principal</div>
+                <a class="menu-item active">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a class="menu-item" id="btn-novaOS">
+                    <i class="fas fa-plus-circle"></i>
+                    <span>Nova OS</span>
+                </a>
+            </div>
+            
+            <div class="menu-section">
+                <div class="menu-title">Gerenciamento</div>
+                <a class="menu-item">
+                    <i class="fas fa-store"></i>
+                    <span>Gerenciamento de Loja</span>
+                </a>
+                <a class="menu-item" id="btn-venda">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span>Venda Rápida</span>
+                </a>
+            </div>
+            
+            <div class="menu-section">
+                <div class="menu-title">Clientes</div>
+                <a class="menu-item" id="btn-clientes">
+                    <i class="fas fa-users"></i>
+                    <span>Gerenciar Clientes</span>
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="header">
+            <h1 class="page-title">Dashboard</h1>
+            <div class="user-info">
+                <div class="user-avatar">A</div>
+                <div>
+                    <div>Admin</div>
+                    <div style="font-size: 12px; color: #7f8c8d;">Administrador</div>
+                </div>
+
+                <button class="logout-btn" id="logoutBtn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M7.5 1v7h1V1h-1z"/>
+                        <path d="M3 8.812a4.999 4.999 0 0 1 2.578-4.375l-.485-.874A6 6 0 1 0 11 3.616l-.501.865A5 5 0 1 1 3 8.812z"/>
+                    </svg>
+                    Sair
+                </button>
+            </div>
+        </div>
+        
+        <!-- Quick Actions -->
+        <div class="dashboard-section">
+            <div class="section-header">
+                <h2 class="section-title">Ações Rápidas</h2>
+            </div>
+            
+            <div class="quick-actions">
+                <div class="action-item">
+                    <h3 class="action-title"><i class="fas fa-plus-circle"></i> Nova OS</h3>
+                    <p class="action-desc">Abrir formulário para nova ordem de serviço</p>
+                    <button class="btn btn-primary" id="btnNovaOSCard">
+                        <i class="fas fa-plus"></i> Criar Nova OS
+                    </button>
+                </div>
+                
+                <div class="action-item">
+                    <h3 class="action-title"><i class="fas fa-store"></i> Gerenciamento de Loja</h3>
+                    <p class="action-desc">Gerenciar produtos, estoque e configurações da loja</p>
+                    <button class="btn btn-primary">
+                        <i class="fas fa-cog"></i> Gerenciar Loja
+                    </button>
+                </div>
+                
+                <div class="action-item">
+                    <h3 class="action-title"><i class="fas fa-shopping-cart"></i> Venda Rápida</h3>
+                    <p class="action-desc">Venda rápida de produtos</p>
+                    <button class="btn btn-primary" id="btn-venda-card">
+                        <i class="fas fa-cash-register"></i> Nova Venda
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Status Overview -->
+        <div class="dashboard-section">
+            <div class="section-header">
+                <h2 class="section-title">Visão Geral</h2>
+                <div class="action-buttons">
+                    <button class="btn btn-outline">
+                        <i class="fas fa-download"></i> Exportar
+                    </button>
+                    <button class="btn btn-outline">
+                        <i class="fas fa-filter"></i> Filtrar
+                    </button>
+                </div>
+            </div>
+            
+            <div class="status-list">
+                <div class="status-item">
+                    <div class="status-header">
+                        <div class="status-title">OS em Aberto</div>
+                        <div class="status-value">20</div>
+                    </div>
+                    <ul class="item-list">
+                        <li class="list-item">
+                            <span class="item-name">Celulares para conserto</span>
+                            <span class="item-value">12</span>
+                        </li>
+                       
+                    </ul>
+                </div>
+                
+                <div class="status-item">
+                    <div class="status-header">
+                        <div class="status-title">Produtos Mais Vendidos</div>
+                        <div class="status-value">42</div>
+                    </div>
+                    <div class="products-list">
+                        <div class="product-item">
+                            <div class="product-info">
+                                <div class="product-name">Capinha iPhone 13</div>
+                            </div>
+                            <div class="product-stats">
+                                <span class="product-quantity">42 unid.</span>
+                                <div class="progress-bar">
+                                    <div class="progress progress-blue" style="width: 85%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="product-item">
+                            <div class="product-info">
+                                <div class="product-name">Película Vidro 3D</div>
+                            </div>
+                            <div class="product-stats">
+                                <span class="product-quantity">38 unid.</span>
+                                <div class="progress-bar">
+                                    <div class="progress progress-green" style="width: 76%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="product-item">
+                            <div class="product-info">
+                                <div class="product-name">Carregador USB-C</div>
+                            </div>
+                            <div class="product-stats">
+                                <span class="product-quantity">35 unid.</span>
+                                <div class="progress-bar">
+                                    <div class="progress progress-purple" style="width: 70%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="status-item">
+                    <div class="status-header">
+                        <div class="status-title">Outros Produtos</div>
+                        <div class="status-value">28</div>
+                    </div>
+                    <div class="products-list">
+                        <div class="product-item">
+                            <div class="product-info">
+                                <div class="product-name">Fone Bluetooth</div>
+                            </div>
+                            <div class="product-stats">
+                                <span class="product-quantity">28 unid.</span>
+                                <div class="progress-bar">
+                                    <div class="progress progress-blue" style="width: 56%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="product-item">
+                            <div class="product-info">
+                                <div class="product-name">Suporte Veicular</div>
+                            </div>
+                            <div class="product-stats">
+                                <span class="product-quantity">25 unid.</span>
+                                <div class="progress-bar">
+                                    <div class="progress progress-green" style="width: 50%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="product-item">
+                            <div class="product-info">
+                                <div class="product-name">Cabo Lightning</div>
+                            </div>
+                            <div class="product-stats">
+                                <span class="product-quantity">22 unid.</span>
+                                <div class="progress-bar">
+                                    <div class="progress progress-purple" style="width: 44%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="btn btn-primary" style="margin-top: 20px;" id="btn-open-client-window">
+                <i class="fas fa-external-link-alt"></i> Gerenciamento de Clientes
             </button>
         </div>
-
-        <div class="btn-novaOS">
-            <button type="submit">Gerenciamento de Loja
-                <span class="btn-icon">📋</span>
-            </button>
+        
+        <!-- OS Creation Form (Initially Hidden) -->
+        <div class="dashboard-section os-container" id="os-form-container">
+            <div class="section-header">
+                <h2 class="section-title">Nova Ordem de Serviço</h2>
+            </div>
+            
+            <form id="os-form">
+                <div class="form-group">
+                    <label class="form-label" for="nome">Nome do Cliente *</label>
+                    <input type="text" class="form-control" id="nome" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="telefone">Telefone *</label>
+                    <input type="text" class="form-control" id="telefone" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="cpf">CPF</label>
+                    <input type="text" class="form-control" id="cpf">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="marcaCell">Marca do Celular *</label>
+                    <select class="form-control" id="marcaCell" required>
+                        <option value="">Selecione a marca</option>
+                        <option value="Samsung">Samsung</option>
+                        <option value="Apple">Apple</option>
+                        <option value="Xiaomi">Xiaomi</option>
+                        <option value="Motorola">Motorola</option>
+                        <option value="LG">LG</option>
+                        <option value="Outra">Outra</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="modeloCell">Modelo do Celular *</label>
+                    <select class="form-control" id="modeloCell" required>
+                        <option value="">Selecione primeiro a marca</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="defeito">Defeito Relatado *</label>
+                    <textarea class="form-control" id="defeito" rows="3" required></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="observacoes">Observações</label>
+                    <textarea class="form-control" id="observacoes" rows="2"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="orcamento">Orçamento (R$)</label>
+                    <input type="number" class="form-control" id="orcamento" min="0" step="0.01">
+                </div>
+                
+                <div class="action-buttons">
+                    <button type="button" class="btn btn-primary" id="btn-salvar-imprimir">
+                        <i class="fas fa-save"></i> Salvar e Imprimir
+                    </button>
+                    <button type="button" class="btn btn-outline" id="btn-salvar">
+                        <i class="fas fa-file"></i> Salvar
+                    </button>
+                    <button type="button" class="btn btn-outline" id="btn-nova">
+                        <i class="fas fa-plus"></i> Nova OS
+                    </button>
+                    <button type="button" class="btn btn-outline" id="btn-visualizar">
+                        <i class="fas fa-list"></i> Visualizar OSs
+                    </button>
+                </div>
+            </form>
         </div>
-
-        <div class="btn-novaOS">
-            <button type="submit">Venda Rapida
-                <span class="btn-text">Venda rapida de produtos</span>
-                <span class="btn-icon">📋</span>
-            </button>
+        
+        <!-- OS Print Template (Initially Hidden) -->
+        <div class="dashboard-section" id="os-print">
+            <div class="section-header">
+                <h2 class="section-title">Ordem de Serviço #<span id="os-number"></span></h2>
+                <div class="status-value" id="os-date"></div>
+            </div>
+            
+            <div class="status-list">
+                <div class="status-item">
+                    <div class="status-header">
+                        <div class="status-title">Dados do Cliente</div>
+                    </div>
+                    <ul class="item-list">
+                        <li class="list-item">
+                            <span class="item-name">Nome:</span>
+                            <span class="item-value" id="print-nome"></span>
+                        </li>
+                        <li class="list-item">
+                            <span class="item-name">Telefone:</span>
+                            <span class="item-value" id="print-telefone"></span>
+                        </li>
+                        <li class="list-item">
+                            <span class="item-name">CPF:</span>
+                            <span class="item-value" id="print-cpf"></span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="status-item">
+                    <div class="status-header">
+                        <div class="status-title">Equipamento</div>
+                    </div>
+                    <ul class="item-list">
+                        <li class="list-item">
+                            <span class="item-name">Marca:</span>
+                            <span class="item-value" id="print-marca"></span>
+                        </li>
+                        <li class="list-item">
+                            <span class="item-name">Modelo:</span>
+                            <span class="item-value" id="print-modelo"></span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="status-item">
+                    <div class="status-header">
+                        <div class="status-title">Serviço</div>
+                    </div>
+                    <ul class="item-list">
+                        <li class="list-item">
+                            <span class="item-name">Defeito:</span>
+                            <span class="item-value" id="print-defeito"></span>
+                        </li>
+                        <li class="list-item">
+                            <span class="item-name">Observações:</span>
+                            <span class="item-value" id="print-observacoes"></span>
+                        </li>
+                        <li class="list-item">
+                            <span class="item-name">Orçamento:</span>
+                            <span class="item-value">R$ <span id="print-orcamento"></span></span>
+                        </li>
+                        <li class="list-item">
+                            <span class="item-name">Data de Entrada:</span>
+                            <span class="item-value" id="print-data-entrada"></span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="action-buttons">
+                <button type="button" class="btn btn-primary" onclick="window.print()">
+                    <i class="fas fa-print"></i> Imprimir
+                </button>
+                <button type="button" class="btn btn-outline" id="btn-voltar">
+                    <i class="fas fa-arrow-left"></i> Voltar
+                </button>
+            </div>
         </div>
+    </div>
 
-        <div class="btn-novaOS">
-            <button type="submit">Clientes
-                <span class="btn-icon">👥</span>
-                <span class="btn-text">Gerenciar cadastro de clientes</span>
-            </button>
+    <!-- Janela de Gerenciamento de Clientes -->
+    <div class="client-window" id="client-window">
+        <div class="client-header">
+            <h2><i class="fas fa-users"></i> Gerenciamento de Clientes</h2>
+            <button class="close-btn" id="close-client-window">&times;</button>
         </div>
-
-    </header>
-
+        <div class="client-content">
+            <div class="search-bar">
+                <input type="text" placeholder="Buscar cliente...">
+                <button class="btn btn-primary">
+                    <i class="fas fa-search"></i> Buscar
+                </button>
+                <button class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Novo Cliente
+                </button>
+            </div>
+            
+            <table class="client-table">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>E-mail</th>
+                        <th>Telefone</th>
+                        <th>Plano</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>João Silva</td>
+                        <td>joao@email.com</td>
+                        <td>(11) 99999-9999</td>
+                        <td>Avançado</td>
+                        <td>
+                            <button class="action-btn edit-btn">Editar</button>
+                            <button class="action-btn delete-btn">Excluir</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Maria Santos</td>
+                        <td>maria@email.com</td>
+                        <td>(11) 98888-8888</td>
+                        <td>Intermediário</td>
+                        <td>
+                            <button class="action-btn edit-btn">Editar</button>
+                            <button class="action-btn delete-btn">Excluir</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Pedro Costa</td>
+                        <td>pedro@email.com</td>
+                        <td>(11) 97777-7777</td>
+                        <td>Básico</td>
+                        <td>
+                            <button class="action-btn edit-btn">Editar</button>
+                            <button class="action-btn delete-btn">Excluir</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Ana Oliveira</td>
+                        <td>ana@email.com</td>
+                        <td>(11) 96666-6666</td>
+                        <td>Avançado</td>
+                        <td>
+                            <button class="action-btn edit-btn">Editar</button>
+                            <button class="action-btn delete-btn">Excluir</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Carlos Souza</td>
+                        <td>carlos@email.com</td>
+                        <td>(11) 95555-5555</td>
+                        <td>Intermediário</td>
+                        <td>
+                            <button class="action-btn edit-btn">Editar</button>
+                            <button class="action-btn delete-btn">Excluir</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
     <script src="./js/script.js"></script>
 </body>
 </html>

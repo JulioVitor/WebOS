@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebOS - Login</title>
+
+    <link rel="stylesheet" href="../style/styleLogin.css">
+</head>
+<body>
+    <div class="login-container">
+        <div class="logo">
+            <h1>Web<span>OS</span></h1>
+            <p>Sistema de Gestão de Ordens de Serviço</p>
+        </div>
+
+        <div class="store-info">
+            <h3>🏪 Loja Principal</h3>
+            <p>Modo de Operação: Loja Única</p>
+        </div>
+
+        <form id="loginForm">
+            <div class="input-group">
+                <label for="nome">Nome</label>
+                <input type="text" id="nome" placeholder="Digite seu nome" required>
+            </div>
+
+            <div class="input-group">
+                <label for="password">Senha</label>
+                <input type="password" id="password" placeholder="Digite sua senha" required>
+            </div>
+
+           
+
+            <button type="submit" class="btn">Entrar no Sistema</button>
+
+         <div class="footer">
+            <p>Problemas para acessar? <a href="#" onclick="createDefaultUser()">Criar usuário padrão</a></p>
+            <p><small>Backend: http://localhost:8001</small></p>
+        </div>
+    </div>
+
+    <script src="../js/auth.js"></script>
+    <script src="../js/app.js"></script>
+</body>
+</html>

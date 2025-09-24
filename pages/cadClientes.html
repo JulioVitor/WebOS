@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciamento de Clientes - WebOS</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../style/clientes.css">
+</head>
+<body>
+    <!-- Overlay -->
+    <div class="overlay" id="overlay"></div>
+    
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <h1><i class="fas fa-desktop"></i> Web<span>OS</span></h1>
+        </div>
+        
+        <div class="menu">
+            <div class="menu-section">
+                <div class="menu-title">Principal</div>
+                <a class="menu-item" href="../index.html">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a class="menu-item" href="../pages/novaOS.html">
+                    <i class="fas fa-plus-circle"></i>
+                    <span>Nova OS</span>
+                </a>
+            </div>
+            
+            <div class="menu-section">
+                <div class="menu-title">Gerenciamento</div>
+                <a class="menu-item">
+                    <i class="fas fa-store"></i>
+                    <span>Gerenciamento de Loja</span>
+                </a>
+                <a class="menu-item" href="../pages/vendaR.html">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span>Venda Rápida</span>
+                </a>
+            </div>
+            
+            <div class="menu-section">
+                <div class="menu-title">Clientes</div>
+                <a class="menu-item active">
+                    <i class="fas fa-users"></i>
+                    <span>Gerenciar Clientes</span>
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="header">
+            <h1 class="page-title">Gerenciamento de Clientes</h1>
+            <div class="user-info">
+                <div class="user-avatar">A</div>
+                <div>
+                    <div>Admin</div>
+                    <div style="font-size: 12px; color: #7f8c8d;">Administrador</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Barra de Pesquisa e Ações -->
+        <div class="dashboard-section">
+            <div class="section-header">
+                <h2 class="section-title">Clientes Cadastrados</h2>
+                <button class="btn btn-primary" id="btn-novo-cliente">
+                    <i class="fas fa-plus"></i> Novo Cliente
+                </button>
+            </div>
+            
+            <div class="search-bar">
+                <input type="text" id="input-pesquisa" placeholder="Buscar cliente por nome, email ou telefone...">
+                <button class="btn btn-primary" id="btn-pesquisar">
+                    <i class="fas fa-search"></i> Buscar
+                </button>
+                <button class="btn btn-outline" id="btn-limpar-pesquisa">
+                    <i class="fas fa-times"></i> Limpar
+                </button>
+            </div>
+        </div>
+        
+        <!-- Tabela de Clientes -->
+        <div class="dashboard-section">
+            <div class="table-responsive">
+                <table class="client-table" id="tabela-clientes">
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>E-mail</th>
+                            <th>Telefone</th>
+                            <th>CPF</th>
+                            <th>Data Cadastro</th>
+                            <th>Status</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="corpo-tabela-clientes">
+                        <!-- Os clientes serão carregados via JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="pagination" id="paginacao">
+                <!-- A paginação será gerada via JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Adicionar/Editar Cliente -->
+    <div class="modal" id="modal-cliente">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modal-titulo">Novo Cliente</h2>
+                <button class="close-btn" id="fechar-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="form-cliente">
+                    <input type="hidden" id="cliente-id">
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="cliente-nome">Nome Completo *</label>
+                            <input type="text" class="form-control" id="cliente-nome" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="cliente-cpf">CPF</label>
+                            <input type="text" class="form-control" id="cliente-cpf">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="cliente-email">E-mail</label>
+                            <input type="email" class="form-control" id="cliente-email">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="cliente-telefone">Telefone *</label>
+                            <input type="text" class="form-control" id="cliente-telefone" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="cliente-endereco">Endereço</label>
+                        <textarea class="form-control" id="cliente-endereco" rows="2"></textarea>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="cliente-cidade">Cidade</label>
+                            <input type="text" class="form-control" id="cliente-cidade">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="cliente-estado">Estado</label>
+                            <select class="form-control" id="cliente-estado">
+                                <option value="">Selecione</option>
+                                <option value="AC">Acre</option>
+                                <option value="AL">Alagoas</option>
+                                <option value="AP">Amapá</option>
+                                <option value="AM">Amazonas</option>
+                                <option value="BA">Bahia</option>
+                                <option value="CE">Ceará</option>
+                                <option value="DF">Distrito Federal</option>
+                                <option value="ES">Espírito Santo</option>
+                                <option value="GO">Goiás</option>
+                                <option value="MA">Maranhão</option>
+                                <option value="MT">Mato Grosso</option>
+                                <option value="MS">Mato Grosso do Sul</option>
+                                <option value="MG">Minas Gerais</option>
+                                <option value="PA">Pará</option>
+                                <option value="PB">Paraíba</option>
+                                <option value="PR">Paraná</option>
+                                <option value="PE">Pernambuco</option>
+                                <option value="PI">Piauí</option>
+                                <option value="RJ">Rio de Janeiro</option>
+                                <option value="RN">Rio Grande do Norte</option>
+                                <option value="RS">Rio Grande do Sul</option>
+                                <option value="RO">Rondônia</option>
+                                <option value="RR">Roraima</option>
+                                <option value="SC">Santa Catarina</option>
+                                <option value="SP">São Paulo</option>
+                                <option value="SE">Sergipe</option>
+                                <option value="TO">Tocantins</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="cliente-observacoes">Observações</label>
+                        <textarea class="form-control" id="cliente-observacoes" rows="3"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="cliente-status" checked>
+                            <span class="checkmark"></span>
+                            Cliente ativo
+                        </label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline" id="btn-cancelar">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="btn-salvar-cliente">Salvar Cliente</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Confirmação de Exclusão -->
+    <div class="modal" id="modal-confirmacao">
+        <div class="modal-content confirmacao">
+            <div class="modal-header">
+                <h2>Confirmar Exclusão</h2>
+                <button class="close-btn" id="fechar-confirmacao">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Tem certeza que deseja excluir o cliente <span id="nome-cliente-exclusao"></span>?</p>
+                <p class="texto-aviso">Esta ação não pode ser desfeita.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline" id="btn-cancelar-exclusao">Cancelar</button>
+                <button type="button" class="btn btn-danger" id="btn-confirmar-exclusao">Excluir</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/clientes.js"></script>
+</body>
+</html>
