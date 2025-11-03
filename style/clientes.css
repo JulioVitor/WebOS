@@ -25,13 +25,19 @@ body {
     min-height: 100vh;
 }
 
-/* Sidebar */
+/* Sidebar - CORRIGIDO */
 .sidebar {
-    width: 250px;
+    width: 280px;
     background: var(--primary);
     color: white;
     padding: 1.5rem 1rem;
     transition: all 0.3s ease;
+    position: fixed;
+    height: 100vh;
+    overflow-y: auto;
+    left: 0;
+    top: 0;
+    z-index: 1000;
 }
 
 .logo {
@@ -89,11 +95,14 @@ body {
     text-align: center;
 }
 
-/* Main Content */
+/* Main Content - CORRIGIDO */
 .main-content {
     flex: 1;
     padding: 2rem;
     overflow-y: auto;
+    margin-left: 280px; /* Largura da sidebar */
+    width: calc(100% - 280px); /* Calcula a largura restante */
+    min-height: 100vh;
 }
 
 .header {
@@ -108,6 +117,7 @@ body {
 .page-title {
     font-weight: 500;
     color: var(--primary);
+    font-size: 1.8rem;
 }
 
 .user-info {
@@ -417,10 +427,15 @@ textarea.form-control {
     margin-top: 0.5rem;
 }
 
-/* Responsividade */
+/* Responsividade - CORRIGIDO */
 @media (max-width: 992px) {
     .sidebar {
         width: 70px;
+        transform: translateX(-100%);
+    }
+    
+    .sidebar.active {
+        transform: translateX(0);
     }
     
     .sidebar .logo h1 span,
@@ -439,12 +454,29 @@ textarea.form-control {
     }
     
     .main-content {
+        margin-left: 0;
+        width: 100%;
         padding: 1.5rem;
     }
     
     .form-row {
         flex-direction: column;
         gap: 0;
+    }
+    
+    /* Botão para abrir sidebar no mobile */
+    .menu-toggle {
+        display: block;
+        position: fixed;
+        top: 1rem;
+        left: 1rem;
+        z-index: 1001;
+        background: var(--primary);
+        color: white;
+        border: none;
+        padding: 0.5rem;
+        border-radius: 4px;
+        cursor: pointer;
     }
 }
 
@@ -471,6 +503,17 @@ textarea.form-control {
         width: 95%;
         margin: 1rem;
     }
+    
+    .header {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+    }
+    
+    .user-info {
+        width: 100%;
+        justify-content: space-between;
+    }
 }
 
 /* Loading State */
@@ -496,4 +539,20 @@ textarea.form-control {
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
+}
+
+/* Adicionar este estilo para o botão de toggle do menu */
+.menu-toggle {
+    display: none;
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+    z-index: 1001;
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 0.7rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1.2rem;
 }

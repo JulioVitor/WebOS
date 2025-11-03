@@ -150,3 +150,46 @@
             margin-top: 15px;
             color: #4ecca3;
         }
+
+        /* styleLogin.css - Adicione */
+        .login-profiles {
+            margin: 20px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .profile-info {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+
+        .profile.admin {
+            background: #e8f4fd;
+            color: #2980b9;
+        }
+
+        .profile.vendedor {
+            background: #f0f8e8;
+            color: #27ae60;
+        }
+
+        .profile.tecnico {
+            background: #f9f0ff;
+            color: #8e44ad;
+        }
+
+        .profile i {
+            width: 20px;
+            text-align: center;
+        }
