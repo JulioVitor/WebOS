@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualizar OS - WebOS</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../style/visualizarOS.css">
+</head>
+<body>
+    <div class="container">
+    
+        <!-- Sidebar -->
+    <div id="sidebar-container"></div>
+    
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <h1 class="page-title">
+                    <i class="fas fa-list-alt"></i> Visualizar Ordens de Serviço
+                </h1>
+                <div class="header-actions">
+                    <div class="user-info">
+                        <span class="user-name" id="user-name">Admin</span>
+                        <span class="user-role" id="user-role">Administrador</span>
+                    </div>
+                    <button class="logout-btn" id="logoutBtn">
+                        <i class="fas fa-sign-out-alt"></i> Sair
+                    </button>
+                </div>
+            </header>
+
+            <div class="content-wrapper">
+                <!-- Filtros e Busca -->
+                <div class="filters-section">
+                    <div class="search-box">
+                        <input type="text" id="search-input" placeholder="Buscar por cliente, telefone, número OS...">
+                        <button class="btn btn-primary" id="btn-pesquisar">
+                            <i class="fas fa-search"></i> Buscar
+                        </button>
+                        <button class="btn btn-secondary" id="btn-limpar">
+                            <i class="fas fa-times"></i> Limpar
+                        </button>
+                    </div>
+
+                    <div class="filters-row">
+                        <div class="filter-group">
+                            <label for="filter-status">Status:</label>
+                            <select id="filter-status">
+                                <option value="">Todos os Status</option>
+                                <option value="pendente">Pendente</option>
+                                <option value="andamento">Em Andamento</option>
+                                <option value="concluida">Concluída</option>
+                                <option value="entregue">Entregue</option>
+                                <option value="cancelada">Cancelada</option>
+                            </select>
+                        </div>
+
+                        <div class="filter-group">
+                            <label for="filter-data">Período:</label>
+                            <select id="filter-data">
+                                <option value="">Todos</option>
+                                <option value="hoje">Hoje</option>
+                                <option value="semana">Esta Semana</option>
+                                <option value="mes">Este Mês</option>
+                                <option value="custom">Personalizado</option>
+                            </select>
+                        </div>
+
+                        <div class="filter-group custom-date" id="custom-date" style="display: none;">
+                            <label for="data-inicio">De:</label>
+                            <input type="date" id="data-inicio">
+                            <label for="data-fim">Até:</label>
+                            <input type="date" id="data-fim">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Estatísticas Rápidas -->
+                <div class="stats-cards">
+                    <div class="stat-card">
+                        <div class="stat-icon total">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>Total de OS</h3>
+                            <span class="stat-value" id="total-os">0</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon pendente">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>Pendentes</h3>
+                            <span class="stat-value" id="pendentes-os">0</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon andamento">
+                            <i class="fas fa-tools"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>Em Andamento</h3>
+                            <span class="stat-value" id="andamento-os">0</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon concluida">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>Concluídas</h3>
+                            <span class="stat-value" id="concluidas-os">0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tabela de OS -->
+                <div class="table-section">
+                    <div class="section-header">
+                        <h2 class="section-title">Ordens de Serviço</h2>
+                        <div class="table-actions">
+                            <button class="btn btn-primary" id="btn-atualizar">
+                                <i class="fas fa-sync-alt"></i> Atualizar
+                            </button>
+                            <button class="btn btn-success" id="btn-imprimir-lista">
+                                <i class="fas fa-print"></i> Imprimir Lista
+                            </button>
+                            <button class="btn btn-info" id="btn-exportar">
+                                <i class="fas fa-download"></i> Exportar
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="table-container">
+                        <div class="data-table-container"> <!-- ✅ NOVO CONTAINER -->
+                            <table class="data-table" id="tabela-os">
+                                <thead>
+                                    <tr>
+                                        <th>Nº OS</th>
+                                        <th>Cliente</th>
+                                        <th>Telefone</th>
+                                        <th>Equipamento</th>
+                                        <th>Defeito</th>
+                                        <th>Data Entrada</th>
+                                        <th>Data Entrega</th> 
+                                        <th>Status</th>
+                                        <th>Orçamento</th>
+                                        <th>Ações</th>
+                                    </tr>
+                                </thead>
+                            <tbody id="corpo-tabela-os">
+                                <tr>
+                                    <td colspan="9" class="no-data">Carregando ordens de serviço...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Paginação -->
+                    <div class="pagination" id="paginacao-os">
+                        <!-- Paginação será gerada via JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal Detalhes OS -->
+    <div id="modal-detalhes-os" class="modal">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h3><i class="fas fa-info-circle"></i> Detalhes da OS</h3>
+                <span class="close" id="fechar-detalhes">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div id="detalhes-os-content">
+                    <!-- Conteúdo será preenchido via JavaScript -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="btn-fechar-detalhes">Fechar</button>
+                <button class="btn btn-primary" id="btn-imprimir-os">Imprimir OS</button>
+                <button class="btn btn-warning" id="btn-editar-os">Editar OS</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/smartSidebar.js"></script>
+    <script src="../js/visualizarOS.js"></script>
+    <script src="../js/session_manager.js"></script>
+</body>
+</html>

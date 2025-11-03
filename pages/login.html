@@ -8,16 +8,40 @@
     <link rel="stylesheet" href="../style/styleLogin.css">
 </head>
 <body>
+
+    <!-- <div class="login-container">
+    <div class="login-header">
+        <h1><i class="fas fa-desktop"></i> WebOS</h1>
+        <p>Sistema de Gestão</p>
+    </div> -->
+    
+    <!-- <div class="login-profiles">
+        <div class="profile-info">
+            <div class="profile admin">
+                <i class="fas fa-crown"></i>
+                <span>Admin: Acesso completo</span>
+            </div>
+            <div class="profile vendedor">
+                <i class="fas fa-shopping-cart"></i>
+                <span>Vendedor: Vendas + OS</span>
+            </div>
+            <div class="profile tecnico">
+                <i class="fas fa-tools"></i>
+                <span>Técnico: Gestão de OS</span>
+            </div>
+        </div>
+    </div> -->
+
     <div class="login-container">
         <div class="logo">
             <h1>Web<span>OS</span></h1>
             <p>Sistema de Gestão de Ordens de Serviço</p>
         </div>
 
-        <div class="store-info">
-            <h3>🏪 Loja Principal</h3>
-            <p>Modo de Operação: Loja Única</p>
-        </div>
+        <!-- <div class="store-info">
+            <h3>🏪 BC IMPORTS </h3>
+            
+        </div> -->
 
         <form id="loginForm">
             <div class="input-group">
@@ -34,13 +58,11 @@
 
             <button type="submit" class="btn">Entrar no Sistema</button>
 
-         <div class="footer">
-            <p>Problemas para acessar? <a href="#" onclick="createDefaultUser()">Criar usuário padrão</a></p>
-            <p><small>Backend: http://localhost:8001</small></p>
-        </div>
+        
     </div>
 
     <script src="../js/auth.js"></script>
     <script src="../js/app.js"></script>
+    <script src="../js/session_manager.js></script>
 </body>
 </html>

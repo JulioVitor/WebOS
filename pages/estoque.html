@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciar Estoque - WebOS</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/quagga/dist/quagga.min.js"></script>
+    <link rel="stylesheet" href="../style/estoque.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+
+<body>
+    <!-- Overlay            -->
+   <div class="overlay" id="overlay"></div>
+    <!-- Sidebar -->
+    <div id="sidebar-container"></div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="header">
+            <h1 class="page-title">
+                <i class="fas fa-boxes"></i> Gerenciar Estoque
+            </h1>
+            <div class="user-info">
+                <div class="user-avatar" id="user-avatar">A</div>
+                <button class="logout-btn" id="logoutBtn">
+                    <i class="fas fa-sign-out-alt"></i> Sair
+                </button>
+            </div>
+        </div>
+
+        <!-- Ações Rápidas -->
+        <div class="quick-actions">
+            <div class="action-card">
+                <div class="action-icon">
+                    <i class="fas fa-plus"></i>
+                </div>
+                <div class="action-content">
+                    <h3>Novo Produto</h3>
+                    <p>Cadastre um novo produto no estoque usando formulário ou código de barras</p>
+                    <button class="action-btn" onclick="abrirModalProduto()">
+                        <i class="fas fa-plus"></i> Cadastrar
+                    </button>
+                </div>
+            </div>
+            
+            <div class="action-card">
+                <div class="action-icon">
+                    <i class="fas fa-barcode"></i>
+                </div>
+                <div class="action-content">
+                    <h3>Leitor de Código</h3>
+                    <p>Use a câmera para ler código de barras e cadastrar produtos rapidamente</p>
+                    <button class="action-btn" onclick="abrirModalScanner()">
+                        <i class="fas fa-camera"></i> Ler Código
+                    </button>
+                </div>
+            </div>
+            
+            <div class="action-card">
+                <div class="action-icon">
+                    <i class="fas fa-chart-bar"></i>
+                </div>
+                <div class="action-content">
+                    <h3>Relatórios</h3>
+                    <p>Visualize relatórios de estoque, produtos mais vendidos e movimentações</p>
+                    <button class="action-btn" onclick="abrirModalRelatorios()">
+                        <i class="fas fa-download"></i> Gerar
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filtros e Busca -->
+        <div class="filters">
+            <select class="filter-select" id="filter-categoria" onchange="filtrarProdutos()">
+                <option value="">Todas as Categorias</option>
+                <option value="acessorios">Acessórios</option>
+                <option value="eletronicos">Eletrônicos</option>
+                <option value="pecas">Peças</option>
+                <option value="outros">Outros</option>
+            </select>
+            
+            <select class="filter-select" id="filter-estoque" onchange="filtrarProdutos()">
+                <option value="">Todo o Estoque</option>
+                <option value="baixo">Estoque Baixo</option>
+                <option value="critico">Estoque Crítico</option>
+                <option value="normal">Estoque Normal</option>
+            </select>
+            
+            <select class="filter-select" id="filter-status" onchange="filtrarProdutos()">
+                <option value="">Todos os Status</option>
+                <option value="ativo">Ativos</option>
+                <option value="inativo">Inativos</option>
+            </select>
+        </div>
+
+        <div class="search-container">
+            <input type="text" class="search-input" id="search-input" placeholder="Buscar por nome, código ou marca..." onkeyup="filtrarProdutos()">
+            <button class="btn btn-primary" onclick="filtrarProdutos()">
+                <i class="fas fa-search"></i> Buscar
+            </button>
+        </div>
+
+        <!-- Lista de Produtos -->
+        <div class="dashboard-section">
+            <div class="section-header">
+                <h2 class="section-title">Produtos em Estoque</h2>
+                <div class="action-buttons">
+                    <button class="btn btn-outline" onclick="exportarEstoque()">
+                        <i class="fas fa-download"></i> Exportar
+                    </button>
+                    <button class="btn btn-primary" onclick="abrirModalProduto()">
+                        <i class="fas fa-plus"></i> Novo Produto
+                    </button>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table class="data-table" id="tabela-produtos">
+                    <thead>
+                        <tr>
+                            <th>Código</th>
+                            <th>Produto</th>
+                            <th>Categoria</th>
+                            <th>Estoque</th>
+                            <th>Mínimo</th>
+                            <th>Preço</th>
+                            <th>Status</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody-produtos">
+                        <!-- Os produtos serão carregados aqui via JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Cadastro/Edição Produto -->
+    <div id="modal-produto" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-produto-titulo">Novo Produto</h3>
+                <button class="close" onclick="fecharModalProduto()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="form-produto">
+                    <input type="hidden" id="produto-id">
+                    
+                    <div class="form-group">
+                        <label for="codigo-barras">Código de Barras</label>
+                        <div style="display: flex; gap: 10px;">
+                            <input type="text" id="codigo-barras" class="form-control" placeholder="Digite ou escaneie o código">
+                            <button type="button" class="btn btn-outline" onclick="abrirModalScanner()" style="white-space: nowrap;">
+                                <i class="fas fa-camera"></i> Escanear
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="nome">Nome do Produto *</label>
+                        <input type="text" id="nome" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="descricao">Descrição</label>
+                        <textarea id="descricao" class="form-control" rows="3" placeholder="Descrição detalhada do produto"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="categoria">Categoria</label>
+                        <select id="categoria" class="form-control">
+                            <option value="">Selecione...</option>
+                            <option value="acessorios">Acessórios</option>
+                            <option value="eletronicos">Eletrônicos</option>
+                            <option value="pecas">Peças</option>
+                            <option value="outros">Outros</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="marca">Marca</label>
+                        <input type="text" id="marca" class="form-control" placeholder="Marca do produto">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="estoque-atual">Estoque Atual</label>
+                        <input type="number" id="estoque-atual" class="form-control" value="0" step="0.01" min="0">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="estoque-minimo">Estoque Mínimo</label>
+                        <input type="number" id="estoque-minimo" class="form-control" value="5" step="0.01" min="0">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="preco-custo">Preço de Custo (R$)</label>
+                        <input type="number" id="preco-custo" class="form-control" step="0.01" min="0">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="preco-venda">Preço de Venda (R$) *</label>
+                        <input type="number" id="preco-venda" class="form-control" step="0.01" min="0" required>
+                    </div>
+
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="ativo" checked>
+                        <label for="ativo">Produto ativo</label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="fecharModalProduto()">Cancelar</button>
+                <button class="btn btn-primary" onclick="salvarProduto()">
+                    <i class="fas fa-save"></i> Salvar Produto
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Scanner Código de Barras -->
+    <div id="modal-scanner" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Leitor de Código de Barras</h3>
+                <button class="close" onclick="fecharModalScanner()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="scanner-container">
+                    <div id="scanner"></div>
+                    <p>Posicione o código de barras dentro da área da câmera</p>
+                    <div class="scanner-controls">
+                        <button class="btn btn-primary" onclick="iniciarScanner()">
+                            <i class="fas fa-play"></i> Iniciar
+                        </button>
+                        <button class="btn btn-outline" onclick="pararScanner()">
+                            <i class="fas fa-stop"></i> Parar
+                        </button>
+                    </div>
+                </div>
+                <div id="scanner-result" style="display: none;">
+                    <h4>Código lido: <span id="codigo-lido"></span></h4>
+                    <button class="btn btn-success" onclick="usarCodigoLido()">
+                        <i class="fas fa-check"></i> Usar este Código
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Modal de Relatórios -->
+<div id="modal-relatorios" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Gerar Relatório PDF</h3>
+            <button class="close" onclick="fecharModalRelatorios()">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="relatorio-options">
+                <label class="option-item">
+                    <input type="checkbox" name="relatorio" value="estoque" checked>
+                    <span class="checkmark"></span>
+                    Relatório de Estoque
+                </label>
+                
+                <label class="option-item">
+                    <input type="checkbox" name="relatorio" value="mais-vendidos">
+                    <span class="checkmark"></span>
+                    Produtos Mais Vendidos
+                </label>
+                
+                <label class="option-item">
+                    <input type="checkbox" name="relatorio" value="movimentacoes">
+                    <span class="checkmark"></span>
+                    Movimentações
+                </label>
+                
+                <label class="option-item">
+                    <input type="checkbox" name="relatorio" value="todos" id="todosRelatorios">
+                    <span class="checkmark"></span>
+                    Gerar Todos os Relatórios
+                </label>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline" onclick="fecharModalRelatorios()">Cancelar</button>
+            <button class="btn btn-primary" onclick="gerarRelatorioPdf()">
+                <i class="fas fa-file-pdf"></i> Gerar PDF
+            </button>
+        </div>
+    </div>
+</div>
+    <!-- Scripts -->
+    <script src="../js/smartSidebar.js"></script>
+    <script src="../js/session_manager.js"></script>
+    <script src="../js/estoque.js"></script>
+    
+</body>
+</html>

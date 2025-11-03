@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fechamento de Caixa</title>
+    <link rel="stylesheet" href="../style/fechamento_caixa.css">
+</head>
+<body>
+    <div class="caixa-container">
+        <header class="caixa-header">
+            <h1>🪙 Fechamento de Caixa</h1>
+            <div class="user-info">
+                <span id="user-name"></span>
+                <span id="user-role" class="role-badge"></span>
+            </div>
+        </header>
+
+        <!-- ✅ Botão de Emergência (apenas para debug) -->
+        <div id="emergencia-container" style="display: none; position: fixed; top: 10px; right: 10px; z-index: 1000;">
+            <button onclick="forcarReaberturaCaixa()" class="btn-emergencia">
+                🔴 Emergência: Forçar Reabertura
+            </button>
+        </div>
+
+        <div id="message" class="message"></div>
+
+        <!-- Card de Status do Caixa -->
+        <div class="status-card">
+            <h3>Status do Caixa - Hoje</h3>
+            <div class="status-info">
+                <span id="caixa-status" class="status-aberto">🟢 ABERTO</span>
+                <span id="caixa-data"></span>
+            </div>
+        </div>
+
+        <!-- Formulário de Fechamento -->
+        <div class="fechamento-form" id="fechamento-form">
+            <h3>Fechar Caixa</h3>
+            
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="valor-inicial">Valor Inicial (R$)</label>
+                    <input type="number" id="valor-inicial" step="0.01" min="0" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="total-vendas">Total em Vendas (R$)</label>
+                    <input type="number" id="total-vendas" step="0.01" min="0" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="total-entradas">Outras Entradas (R$)</label>
+                    <input type="number" id="total-entradas" step="0.01" min="0" value="0">
+                </div>
+                
+                <div class="form-group">
+                    <label for="total-saidas">Total de Saídas (R$)</label>
+                    <input type="number" id="total-saidas" step="0.01" min="0" value="0">
+                </div>
+            </div>
+
+            <div class="form-group full-width">
+                <label for="observacoes">Observações</label>
+                <textarea id="observacoes" placeholder="Observações sobre o fechamento..."></textarea>
+            </div>
+
+            <!-- ✅ NOVA SEÇÃO: OS Entregues do Dia -->
+            <div class="os-entregues-card" id="os-entregues-card" style="display: none;">
+                <h4>📋 Ordens de Serviço Entregues Hoje</h4>
+                <div class="os-info">
+                    <div class="os-linha">
+                        <span>Quantidade de OS:</span>
+                        <span id="os-quantidade">0</span>
+                    </div>
+                    <div class="os-linha">
+                        <span>Total em OS:</span>
+                        <span id="os-total">R$ 0,00</span>
+                    </div>
+                    <button type="button" id="btn-usar-os" class="btn-secondary btn-small">
+                        ✅ Usar este valor em Vendas
+                    </button>
+                </div>
+            </div>
+
+
+            <!-- Resumo Automático -->
+            <div class="resumo-card">
+                <h4>Resumo do Fechamento</h4>
+                <div class="resumo-linha">
+                    <span>Valor Inicial:</span>
+                    <span id="resumo-inicial">R$ 0,00</span>
+                </div>
+                <div class="resumo-linha">
+                    <span>Total Entradas:</span>
+                    <span id="resumo-entradas">R$ 0,00</span>
+                </div>
+                <div class="resumo-linha">
+                    <span>Total Saídas:</span>
+                    <span id="resumo-saidas">R$ 0,00</span>
+                </div>
+                <div class="resumo-linha total">
+                    <span>Valor Final:</span>
+                    <span id="resumo-final">R$ 0,00</span>
+                </div>
+            </div>
+
+            <div class="actions">
+                <button type="button" id="btn-calcular" class="btn-secondary">Calcular</button>
+                <button type="button" id="btn-fechar-caixa" class="btn-primary">Fechar Caixa</button>
+                <button type="button" id="btn-voltar" class="btn-secondary">Voltar</button>
+            </div>
+        </div>
+
+        
+        <!-- Histórico de Fechamentos -->
+        <div class="historico-section">
+            <h3>Histórico de Fechamentos</h3>
+            
+            <!-- ✅ Filtros Corrigidos -->
+            <div class="filtros">
+                <input type="date" id="data-inicio" placeholder="Data início">
+                <input type="date" id="data-fim" placeholder="Data fim">
+                <button id="btn-filtrar" class="btn-secondary">🔍 Filtrar</button>
+            </div>
+
+            <!-- ✅ Ações Administrativas Corrigidas -->
+            <div id="admin-actions" class="admin-actions" style="display: none;">
+                <h4>⚙️ Ações Administrativas</h4>
+                <div class="admin-actions-content">
+                    <!-- ✅ Botão com ID CORRETO -->
+                    <button id="btn-reabrir-caixa" class="btn-warning" disabled>
+                        ↩️ Reabrir Caixa Selecionado
+                    </button>
+                    <span id="selected-caixa-info" class="selected-info">
+                        Nenhum caixa selecionado
+                    </span>
+                </div>
+            </div>
+
+            <div id="historico-lista" class="historico-lista">
+                <!-- Lista será preenchida via JavaScript -->
+                <div class="loading-state">
+                    <p>Carregando histórico...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ✅ Modal de Reabertura (será criado dinamicamente pelo JavaScript) -->
+    <!-- O modal será inserido aqui via JavaScript quando necessário -->
+
+    <script src="../js/caixa.js"></script>
+    <script src="../js/session_manager.js"></script>
+
+    <style>
+        /* ✅ Estilos emergenciais para o botão de emergência */
+        .btn-emergencia {
+            background: #ff4444;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .btn-emergencia:hover {
+            background: #cc0000;
+        }
+        
+        .admin-actions-content {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .selected-info {
+            font-size: 14px;
+            color: #666;
+            font-style: italic;
+        }
+        
+        .loading-state {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+        }
+    </style>
+</body>
+</html>

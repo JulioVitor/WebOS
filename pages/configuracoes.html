@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configurações - WebOS</title>
+    <link rel="stylesheet" href="../style/config.css">
+    </head>
+<body>
+    <div class="settings-container">
+        <div class="settings-header">
+            <h1 class="settings-title">Configurações do Sistema</h1>
+            <input type="text" class="search-box" placeholder="Pesquisar configurações..." id="searchInput">
+        </div>
+
+        <!-- Alertas -->
+        <div id="alertContainer"></div>
+
+        <div class="settings-grid">
+            <!-- Configurações Gerais -->
+            <div class="settings-card">
+                <div class="card-header">
+                    <div class="card-icon">⚙️</div>
+                    <h2 class="card-title">Configurações Gerais</h2>
+                </div>
+                <ul class="settings-list">
+                    <li class="settings-item">
+                        <div>
+                            <div class="item-label">Idioma do Sistema</div>
+                            <div class="item-description">Define o idioma da interface</div>
+                        </div>
+                        <select id="languageSelect">
+                            <option value="pt-BR">Português (Brasil)</option>
+                            <option value="en">Inglês</option>
+                            <option value="es">Espanhol</option>
+                        </select>
+                    </li>
+                    <li class="settings-item">
+                        <div>
+                            <div class="item-label">Fuso Horário</div>
+                            <div class="item-description">Define o fuso horário do sistema</div>
+                        </div>
+                        <select id="timezoneSelect">
+                            <option value="America/Sao_Paulo">Brasília (GMT-3)</option>
+                            <option value="America/Manaus">Manaus (GMT-4)</option>
+                            <option value="America/Rio_Branco">Rio Branco (GMT-5)</option>
+                        </select>
+                    </li>
+                    <li class="settings-item">
+                        <div>
+                            <div class="item-label">Formato de Data</div>
+                            <div class="item-description">Define como as datas são exibidas</div>
+                        </div>
+                        <select id="dateFormatSelect">
+                            <option value="DD/MM/AAAA">DD/MM/AAAA</option>
+                            <option value="MM/DD/AAAA">MM/DD/AAAA</option>
+                            <option value="AAAA-MM-DD">AAAA-MM-DD</option>
+                        </select>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Configurações de Segurança -->
+            <div class="settings-card">
+                <div class="card-header">
+                    <div class="card-icon">🔒</div>
+                    <h2 class="card-title">Segurança</h2>
+                </div>
+                <ul class="settings-list">
+                    <li class="settings-item">
+                        <div>
+                            <div class="item-label">Login Automático</div>
+                            <div class="item-description">Fazer login automaticamente ao iniciar</div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="autoLoginToggle">
+                            <span class="slider"></span>
+                        </label>
+                    </li>
+                    <li class="settings-item">
+                        <div>
+                            <div class="item-label">Solicitar Senha para Alterações</div>
+                            <div class="item-description">Exigir senha para modificar configurações críticas</div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="passwordRequiredToggle">
+                            <span class="slider"></span>
+                        </label>
+                    </li>
+                    <li class="settings-item">
+                        <div>
+                            <div class="item-label">Tempo de Inatividade</div>
+                            <div class="item-description">Tempo para bloqueio automático</div>
+                        </div>
+                        <select id="inactivityTimeoutSelect">
+                            <option value="5">5 minutos</option>
+                            <option value="10">10 minutos</option>
+                            <option value="15">15 minutos</option>
+                            <option value="30">30 minutos</option>
+                        </select>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Configurações de Notificações -->
+            <div class="settings-card">
+                <div class="card-header">
+                    <div class="card-icon">🔔</div>
+                    <h2 class="card-title">Notificações</h2>
+                </div>
+                <ul class="settings-list">
+                    <li class="settings-item">
+                        <div>
+                            <div class="item-label">Notificações por Email</div>
+                            <div class="item-description">Receber alertas por email</div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="emailNotificationsToggle" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </li>
+                    <li class="settings-item">
+                        <div>
+                            <div class="item-label">Alertas de Estoque Baixo</div>
+                            <div class="item-description">Notificar quando produtos estiverem com estoque baixo</div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="lowStockAlertsToggle" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </li>
+                    <li class="settings-item">
+                        <div>
+                            <div class="item-label">Notificações de Vendas</div>
+                            <div class="item-description">Alertas sobre vendas e transações</div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="salesNotificationsToggle">
+                            <span class="slider"></span>
+                        </label>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Configurações de Impressão -->
+            <div class="settings-card">
+                <div class="card-header">
+                    <div class="card-icon">🖨️</div>
+                    <h2 class="card-title">Impressão</h2>
+                </div>
+                <ul class="settings-list">
+                    <li class="settings-item">
+                        <div>
+                            <div class="item-label">Impressora Padrão</div>
+                            <div class="item-description">Selecione a impressora padrão</div>
+                        </div>
+                        <select id="printerSelect">
+                            <option value="thermal1">Impressora Térmica 1</option>
+                            <option value="thermal2">Impressora Térmica 2</option>
+                            <option value="laser">Impressora Laser</option>
+                        </select>
+                    </li>
+                    <li class="settings-item">
+                        <div>
+                            <div class="item-label">Imprimir Cupom Automaticamente</div>
+                            <div class="item-description">Imprimir cupom após finalizar venda</div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="autoPrintToggle" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </li>
+                    <li class="settings-item">
+                        <div>
+                            <div class="item-label">Tamanho do Papel</div>
+                            <div class="item-description">Definir o tamanho do papel para impressão</div>
+                        </div>
+                        <select id="paperSizeSelect">
+                            <option value="58mm">58mm</option>
+                            <option value="80mm">80mm</option>
+                        </select>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Configurações de Backup -->
+            <div class="settings-card">
+                <div class="card-header">
+                    <div class="card-icon">💾</div>
+                    <h2 class="card-title">Backup</h2>
+                </div>
+                <ul class="settings-list">
+                    <li class="settings-item">
+                        <div>
+                            <div class="item-label">Backup Automático</div>
+                            <div class="item-description">Fazer backup automaticamente</div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="autoBackupToggle" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </li>
+                    <li class="settings-item">
+                        <div>
+                            <div class="item-label">Frequência do Backup</div>
+                            <div class="item-description">Com que frequência fazer backup</div>
+                        </div>
+                        <select id="backupFrequencySelect">
+                            <option value="daily">Diariamente</option>
+                            <option value="weekly">Semanalmente</option>
+                            <option value="monthly">Mensalmente</option>
+                        </select>
+                    </li>
+                    <li class="settings-item">
+                        <div>
+                            <div class="item-label">Local do Backup</div>
+                            <div class="item-description">Onde salvar os backups</div>
+                        </div>
+                        <select id="backupLocationSelect">
+                            <option value="local">Servidor Local</option>
+                            <option value="cloud">Nuvem</option>
+                            <option value="external">Disco Externo</option>
+                        </select>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Configurações de Rede -->
+            <div class="settings-card">
+                <div class="card-header">
+                    <div class="card-icon">🌐</div>
+                    <h2 class="card-title">Rede</h2>
+                </div>
+                <ul class="settings-list">
+                    <li class="settings-item">
+                        <div>
+                            <div class="item-label">Configuração de Rede</div>
+                            <div class="item-description">Configurar conexão de rede</div>
+                        </div>
+                        <button class="btn btn-primary" onclick="configureNetwork()">Configurar</button>
+                    </li>
+                    <li class="settings-item">
+                        <div>
+                            <div class="item-label">Sincronização em Nuvem</div>
+                            <div class="item-description">Sincronizar dados com a nuvem</div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="cloudSyncToggle" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </li>
+                    <li class="settings-item">
+                        <div>
+                            <div class="item-label">Frequência de Sincronização</div>
+                            <div class="item-description">Com que frequência sincronizar</div>
+                        </div>
+                        <select id="syncFrequencySelect">
+                            <option value="realtime">Em tempo real</option>
+                            <option value="15min">A cada 15 minutos</option>
+                            <option value="hourly">A cada hora</option>
+                        </select>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Gerenciamento de Usuários -->
+            <div class="settings-card">
+                <div class="card-header">
+                    <div class="card-icon">👥</div>
+                    <h2 class="card-title">Gerenciar Usuários</h2>
+                </div>
+                <ul class="settings-list">
+                    <li class="settings-item">
+                        <div>
+                            <div class="item-label">Usuários do Sistema</div>
+                            <div class="item-description">Gerenciar contas de usuário</div>
+                        </div>
+                        <button class="btn btn-primary" onclick="openUserManagement()">Gerenciar</button>
+                    </li>
+                    <li class="settings-item">
+                        <div>
+                            <div class="item-label">Permissões</div>
+                            <div class="item-description">Configurar níveis de acesso</div>
+                        </div>
+                        <button class="btn btn-primary" onclick="openPermissionsModal()">Configurar</button>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Configurações de Estoque -->
+            <div class="settings-card">
+                <div class="card-header">
+                    <div class="card-icon">📦</div>
+                    <h2 class="card-title">Estoque</h2>
+                </div>
+                <ul class="settings-list">
+                    <li class="settings-item">
+                        <div>
+                            <div class="item-label">Alerta de Estoque Mínimo</div>
+                            <div class="item-description">Notificar quando estoque estiver baixo</div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="stockAlertToggle" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </li>
+                    <li class="settings-item">
+                        <div>
+                            <div class="item-label">Estoque Mínimo Padrão</div>
+                            <div class="item-description">Valor padrão para alertas de estoque</div>
+                        </div>
+                        <input type="number" id="defaultMinStock" value="5" min="0" style="width: 80px;">
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Seção de Backup Manual -->
+        <div class="backup-section">
+            <h2 class="backup-title">Backup e Restauração</h2>
+            <div class="backup-actions">
+                <button class="btn btn-primary" onclick="createBackup()">Fazer Backup Agora</button>
+                <button class="btn btn-primary" onclick="restoreBackup()">Restaurar Backup</button>
+                <button class="btn btn-danger" onclick="clearData()">Limpar Dados</button>
+                <button class="btn btn-success" onclick="exportData()">Exportar Dados</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Gerenciamento de Usuários -->
+    <div id="userManagementModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Gerenciar Usuários</h3>
+                <span class="close" onclick="closeUserManagement()">&times;</span>
+            </div>
+            <div class="user-list" id="userList">
+                <!-- Lista de usuários será carregada aqui -->
+            </div>
+            <div class="form-actions">
+                <button class="btn btn-primary" onclick="openAddUserModal()">Adicionar Usuário</button>
+                <button class="btn" onclick="closeUserManagement()">Fechar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Adicionar/Editar Usuário -->
+    <div id="userFormModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="userFormTitle">Adicionar Usuário</h3>
+                <span class="close" onclick="closeUserForm()">&times;</span>
+            </div>
+            <form id="userForm">
+                <div class="form-group">
+                    <label for="userName">Nome:</label>
+                    <input type="text" id="userName" required>
+                </div>
+                <div class="form-group">
+                    <label for="userEmail">Email:</label>
+                    <input type="email" id="userEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="userPassword">Senha:</label>
+                    <input type="password" id="userPassword" required>
+                </div>
+                <div class="form-group">
+                    <label for="userProfile">Perfil:</label>
+                    <select id="userProfile" required>
+                        <option value="admin">Administrador</option>
+                        <option value="tecnico">Técnico</option>
+                        <option value="vendedor">Vendedor</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="userActive" checked> Usuário Ativo
+                    </label>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                    <button type="button" class="btn" onclick="closeUserForm()">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal de Permissões -->
+    <div id="permissionsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Gerenciar Permissões</h3>
+                <span class="close" onclick="closePermissionsModal()">&times;</span>
+            </div>
+            <div id="permissionsContent">
+                <!-- Conteúdo de permissões será carregado aqui -->
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/session_manager.js"></script>
+    <script src="../js/configuracoes.js"></script>
+</body>
+</html>

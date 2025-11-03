@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatórios & Analytics - WebOS</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="../style/relatorio.css">
+</head>
+<body>
+    <div class="reports-container">
+        <div class="reports-header">
+            <h1 class="reports-title">Relatórios & Analytics</h1>
+            <div class="period-selector">
+                <select id="reportPeriod">
+                    <option value="today">Hoje</option>
+                    <option value="yesterday">Ontem</option>
+                    <option value="week" selected>Esta Semana</option>
+                    <option value="month">Este Mês</option>
+                    <option value="quarter">Este Trimestre</option>
+                    <option value="year">Este Ano</option>
+                    <option value="custom">Personalizado</option>
+                </select>
+                <input type="date" id="startDate" class="hidden">
+                <input type="date" id="endDate" class="hidden">
+                <button class="btn btn-primary" onclick="loadReports()">Aplicar</button>
+                <button class="btn btn-success" onclick="openExportModal()">Exportar</button>
+            </div>
+        </div>
+
+        <!-- Alertas -->
+        <div id="alertContainer"></div>
+
+        <!-- Cards de Estatísticas -->
+        <div class="stats-grid" id="statsGrid">
+            <div class="stat-card">
+                <div class="stat-label">Vendas do Período</div>
+                <div class="stat-value" id="totalSales">R$ 0,00</div>
+                <div class="stat-trend trend-up" id="salesTrend">+0% vs período anterior</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Total de Vendas</div>
+                <div class="stat-value" id="salesCount">0</div>
+                <div class="stat-trend trend-up" id="salesCountTrend">+0%</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Ticket Médio</div>
+                <div class="stat-value" id="averageTicket">R$ 0,00</div>
+                <div class="stat-trend trend-down" id="ticketTrend">-0%</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">OS em Andamento</div>
+                <div class="stat-value" id="osInProgress">0</div>
+                <div class="stat-trend trend-up" id="osTrend">+0%</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Produtos em Estoque</div>
+                <div class="stat-value" id="totalProducts">0</div>
+                <div class="stat-label" id="lowStockInfo">0 com estoque baixo</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Clientes Ativos</div>
+                <div class="stat-value" id="activeClients">0</div>
+                <div class="stat-trend trend-up" id="clientsTrend">+0%</div>
+            </div>
+        </div>
+
+        <!-- Filtros Avançados -->
+        <div class="filters-section">
+            <h3>Filtros Avançados</h3>
+            <div class="filters-grid">
+                <div class="filter-group">
+                    <label for="userFilter">Vendedor:</label>
+                    <select id="userFilter">
+                        <option value="">Todos os Vendedores</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="statusFilter">Status OS:</label>
+                    <select id="statusFilter">
+                        <option value="">Todos os Status</option>
+                        <option value="andamento">Em Andamento</option>
+                        <option value="concluida">Concluída</option>
+                        <option value="entregue">Entregue</option>
+                        <option value="cancelada">Cancelada</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="categoryFilter">Categoria Produto:</label>
+                    <select id="categoryFilter">
+                        <option value="">Todas as Categorias</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="paymentFilter">Forma de Pagamento:</label>
+                    <select id="paymentFilter">
+                        <option value="">Todas as Formas</option>
+                        <option value="dinheiro">Dinheiro</option>
+                        <option value="cartao">Cartão</option>
+                        <option value="pix">PIX</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gráficos -->
+        <div class="charts-grid">
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h3 class="chart-title">Vendas por Dia</h3>
+                </div>
+                <div class="chart-container">
+                    <canvas id="salesChart"></canvas>
+                </div>
+            </div>
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h3 class="chart-title">Produtos Mais Vendidos</h3>
+                </div>
+                <div class="chart-container">
+                    <canvas id="productsChart"></canvas>
+                </div>
+            </div>
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h3 class="chart-title">Status das OS</h3>
+                </div>
+                <div class="chart-container">
+                    <canvas id="osStatusChart"></canvas>
+                </div>
+            </div>
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h3 class="chart-title">Formas de Pagamento</h3>
+                </div>
+                <div class="chart-container">
+                    <canvas id="paymentChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Relatório de Vendas -->
+        <div class="reports-section">
+            <h3 class="section-title">Relatório de Vendas</h3>
+            <div class="table-container">
+                <table class="data-table" id="salesTable">
+                    <thead>
+                        <tr>
+                            <th>Nº Venda</th>
+                            <th>Data</th>
+                            <th>Cliente</th>
+                            <th>Vendedor</th>
+                            <th>Itens</th>
+                            <th>Total</th>
+                            <th>Pagamento</th>
+                        </tr>
+                    </thead>
+                    <tbody id="salesTableBody">
+                        <!-- Dados serão carregados via JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Relatório de OS -->
+        <div class="reports-section">
+            <h3 class="section-title">Relatório de Ordens de Serviço</h3>
+            <div class="table-container">
+                <table class="data-table" id="osTable">
+                    <thead>
+                        <tr>
+                            <th>Nº OS</th>
+                            <th>Cliente</th>
+                            <th>Equipamento</th>
+                            <th>Defeito</th>
+                            <th>Orçamento</th>
+                            <th>Status</th>
+                            <th>Data Entrada</th>
+                            <th>Técnico</th>
+                        </tr>
+                    </thead>
+                    <tbody id="osTableBody">
+                        <!-- Dados serão carregados via JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Relatório de Estoque -->
+        <div class="reports-section">
+            <h3 class="section-title">Relatório de Estoque</h3>
+            <div class="table-container">
+                <table class="data-table" id="stockTable">
+                    <thead>
+                        <tr>
+                            <th>Produto</th>
+                            <th>Categoria</th>
+                            <th>Estoque Atual</th>
+                            <th>Estoque Mínimo</th>
+                            <th>Preço Custo</th>
+                            <th>Preço Venda</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="stockTableBody">
+                        <!-- Dados serão carregados via JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Ações -->
+        <div class="actions-section">
+            <button class="btn btn-primary" onclick="generateFullReport()">
+                <span id="generateReportText">Gerar Relatório Completo</span>
+                <span class="loading hidden" id="generateReportLoading"></span>
+            </button>
+            <button class="btn btn-success" onclick="printReports()">Imprimir Relatórios</button>
+        </div>
+    </div>
+
+    <!-- Modal de Exportação -->
+    <div id="exportModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Exportar Relatórios</h3>
+                <span class="close" onclick="closeExportModal()">&times;</span>
+            </div>
+            <form id="exportForm">
+                <div class="form-group">
+                    <label for="exportFormat">Formato:</label>
+                    <select id="exportFormat" required>
+                        <option value="pdf">PDF</option>
+                        <option value="excel">Excel</option>
+                        <option value="csv">CSV</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="exportType">Tipo de Relatório:</label>
+                    <select id="exportType" required>
+                        <option value="all">Todos os Relatórios</option>
+                        <option value="sales">Relatório de Vendas</option>
+                        <option value="os">Relatório de OS</option>
+                        <option value="stock">Relatório de Estoque</option>
+                        <option value="analytics">Analytics</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="exportPeriod">Período:</label>
+                    <select id="exportPeriod" required>
+                        <option value="current">Período Atual</option>
+                        <option value="custom">Personalizado</option>
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Exportar</button>
+                    <button type="button" class="btn" onclick="closeExportModal()">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <script src="../js/relatorios.js"></script> 
+    <script src="../js/session_manager.js"></script>  
+</body>
+</html>

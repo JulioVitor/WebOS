@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebOS - Gerenciar Usuarios</title>
+
+    <link rel="stylesheet" href="../style/cadusers.css">
+</head>
+<body>
+  
+         <!-- Overlay-->
+   <div class="overlay" id="overlay"></div>
+    <!-- Sidebar -->
+    <div id="sidebar-container"></div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <div class="header">
+            <h1 class="page-title">Usuários e Permissões</h1>
+            <div class="user-info">
+                <div class="user-avatar">A</div>
+                <span>Administrador</span>
+                <button class="logout-btn">🚪 Sair</button>
+            </div>
+        </div>
+
+        <!-- Ações Rápidas -->
+        <div class="dashboard-section">
+            <div class="section-header">
+                <h2 class="section-title">Ações Rápidas</h2>
+            </div>
+            
+            <div class="quick-actions">
+                <div class="action-card" onclick="openUserModal()">
+                    <div class="action-icon">+</div>
+                    <div class="action-content">
+                        <h3>Novo Usuário</h3>
+                        <p>Adicionar novo usuário ao sistema com permissões específicas</p>
+                        <button class="action-btn">Criar Usuário</button>
+                    </div>
+                </div>
+
+                <div class="action-card" onclick="managePermissions()">
+                    <div class="action-icon">🔐</div>
+                    <div class="action-content">
+                        <h3>Gerenciar Permissões</h3>
+                        <p>Configurar níveis de acesso e permissões dos usuários</p>
+                        <button class="btn btn-primary" id="btn-gerenciar-permissoes">
+                            Gerenciar Permissões
+                        </button>
+                    </div>
+                </div>
+
+                <div class="action-card" onclick="bulkActions()">
+                    <div class="action-icon">🔄</div>
+                    <div class="action-content">
+                        <h3>Ações em Massa</h3>
+                        <p>Redefinir senhas ou alterar status de múltiplos usuários</p>
+                        <button class="action-btn">Executar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Lista de Usuários -->
+        <div class="dashboard-section">
+            <div class="section-header">
+                <h2 class="section-title">Usuários do Sistema</h2>
+                <div class="action-buttons">
+                    <button class="btn btn-outline">
+                        🔄 Atualizar
+                    </button>
+                    <button class="btn btn-primary" onclick="openUserModal()">
+                        👤 Novo Usuário
+                    </button>
+                </div>
+            </div>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Usuário</th>
+                        <th>Email</th>
+                        <th>Perfil</th>
+                        <th>Status</th>
+                        <th>Último Acesso</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody id="usersTableBody">
+                    <!-- Usuários carregados via JavaScript -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Modal para Novo Usuário -->
+    <div class="modal" id="userModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Novo Usuário</h3>
+                <span class="close" onclick="closeUserModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="userForm">
+                    <input type="hidden" id="userId">
+                    
+                    <div class="form-group">
+                        <label for="userName">Nome Completo</label>
+                        <input type="text" id="userName" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="userEmail">Email</label>
+                        <input type="email" id="userEmail" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="userProfile">Perfil</label>
+                        <select id="userProfile" required>
+                            <option value="">Selecione um perfil</option>
+                            <option value="admin">Administrador</option>
+                            <option value="vendedor">Vendedor</option>
+                            <option value="tecnico">Técnico</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="userPassword">Senha</label>
+                        <input type="password" id="userPassword">
+                        <small style="color: #7f8c8d; font-size: 0.8em;">Deixe em branco para manter a senha atual</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="userStatus">Status</label>
+                        <select id="userStatus" required>
+                            <option value="1">Ativo</option>
+                            <option value="0">Inativo</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeUserModal()">Cancelar</button>
+                <button class="btn btn-primary" onclick="saveUser()">Salvar Usuário</button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Modal de Gerenciamento de Permissões -->
+<div id="modal-permissoes" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>⚙️ Gerenciar Permissões do Sistema</h2>
+            <span class="close">&times;</span>
+        </div>
+        
+        <div class="modal-body">
+            <!-- Seletor de Usuário -->
+            <div class="form-group">
+                <label for="select-usuario">Selecionar Usuário:</label>
+                <select id="select-usuario" class="form-control">
+                    <option value="">Selecione um usuário...</option>
+                    <option value="admin">Administrador</option>
+                    <option value="gerente">Gerente</option>
+                    <option value="vendedor">Vendedor</option>
+                    <option value="estoque">Estoque</option>
+                </select>
+            </div>
+
+            <!-- Níveis de Acesso -->
+            <div class="form-group">
+                <label>Nível de Acesso:</label>
+                <div class="niveis-acesso">
+                    <label class="radio-label">
+                        <input type="radio" name="nivel-acesso" value="admin"> Administrador
+                        <span class="radio-desc">Acesso total ao sistema</span>
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="nivel-acesso" value="tecnico"> Técnico
+                        <span class="radio-desc">Gerencia OS e produtos</span>
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="nivel-acesso" value="vendedor"> Vendedor
+                        <span class="radio-desc">Vendas e clientes</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Permissões Específicas -->
+            <div class="form-group">
+                <label>Permissões Detalhadas:</label>
+                <div class="permissoes-lista">
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="permissao" value="gerenciar_usuarios"> 
+                        Gerenciar Usuários
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="permissao" value="gerenciar_produtos"> 
+                        Gerenciar Produtos
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="permissao" value="gerenciar_vendas"> 
+                        Gerenciar Vendas
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="permissao" value="ver_relatorios"> 
+                        Ver Relatórios
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="permissao" value="exportar_dados"> 
+                        Exportar Dados
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="permissao" value="configurar_sistema"> 
+                        Configurar Sistema
+                    </label>
+                </div>
+            </div>
+
+            <!-- Preview das Permissões -->
+            <div class="permissoes-preview">
+                <h4>📊 Resumo de Permissões:</h4>
+                <div id="preview-permissoes" class="preview-content">
+                    Selecione um usuário e nível de acesso...
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" id="btn-cancelar-permissoes">Cancelar</button>
+            <button type="button" class="btn btn-primary" id="btn-salvar-permissoes">Salvar Permissões</button>
+        </div>
+    </div>
+</div>
+    <!-- Scripts -->
+    <script src="../js/smartSidebar.js"></script>
+    <script src="../js/cadusers.js"></script>
+    <script src="../js/session_manager.js"></script>
+</body>
+</html>
