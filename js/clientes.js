@@ -95,23 +95,32 @@ function aplicarMascaras() {
 }
 
 // Função para carregar clientes do servidor
+
 async function carregarClientes() {
     try {
         mostrarLoading(true);
         
         const sessionToken = localStorage.getItem('session_token');
+        if (!sessionToken) {
+            console.error('❌ Token de sessão não encontrado');
+            carregarClientesLocal();
+            return;
+        }
+        
         let url = 'http://localhost:8001/api/clientes';
         
-        // Adicionar parâmetros de paginação e pesquisa se existirem
+        // Adicionar parâmetros de paginação e pesquisa - CORRIGIDO
         const params = new URLSearchParams();
         params.append('pagina', paginaAtual);
         params.append('limite', itensPorPagina);
         
         if (termoPesquisa) {
-            params.append('pesquisa', termoPesquisa);
+            params.append('pesquisa', termoPesquisa); // ✅ CORREÇÃO: 'pesquisa' em vez de 'busca'
         }
         
         url += `?${params.toString()}`;
+        
+        console.log(`🔗 Fazendo requisição para: ${url}`);
         
         const response = await fetch(url, {
             method: 'GET',
@@ -121,25 +130,60 @@ async function carregarClientes() {
             }
         });
         
+        console.log("📡 Status da resposta:", response.status);
+        
         if (!response.ok) {
+            // Se for erro 404, pode ser que a rota não exista
+            if (response.status === 404) {
+                console.log('⚠️ Rota /api/clientes não encontrada, usando fallback');
+                carregarClientesLocal();
+                return;
+            }
+            
+            // Se for erro 401 (não autorizado)
+            if (response.status === 401) {
+                localStorage.removeItem('session_token');
+                alert('Sessão expirada. Faça login novamente.');
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            const errorText = await response.text();
+            console.error(`❌ Erro HTTP ${response.status}:`, errorText);
             throw new Error(`Erro HTTP: ${response.status}`);
         }
         
         const data = await response.json();
-        clientes = data.clientes || [];
+        console.log('✅ Dados recebidos do servidor:', data);
+        
+        // Verificar estrutura da resposta
+        if (data.clientes === undefined) {
+            console.warn('⚠️ Resposta não contém array "clientes", usando estrutura alternativa:', data);
+            clientes = Array.isArray(data) ? data : [];
+        } else {
+            clientes = data.clientes || [];
+        }
+        
+        console.log(`📊 ${clientes.length} clientes carregados`);
         
         // Renderizar a tabela
         renderizarTabelaClientes();
         
-        // Renderizar paginação
-        renderizarPaginacao(data.total, data.paginas);
+        // Renderizar paginação (usar dados da resposta ou calcular)
+        const total = data.total || clientes.length;
+        const totalPaginas = data.total_paginas || Math.ceil(total / itensPorPagina);
+        renderizarPaginacao(total, totalPaginas);
         
     } catch (error) {
         console.error('❌ Erro ao carregar clientes:', error);
-        alert('Erro ao carregar clientes. Verifique o console para mais detalhes.');
         
         // Fallback: carregar do localStorage se disponível
         carregarClientesLocal();
+        
+        // Mostrar mensagem amigável para o usuário
+        if (error.message.includes('Failed to fetch') || error.message.includes('CORS')) {
+            console.log('🌐 Erro de conexão, usando modo offline');
+        }
     } finally {
         mostrarLoading(false);
     }
@@ -321,26 +365,39 @@ function fecharModalCliente() {
     document.getElementById('modal-cliente').style.display = 'none';
 }
 
-// Salvar cliente (novo ou edição)
+// Salvar cliente 
 async function salvarCliente() {
     if (!validarFormularioCliente()) return;
     
     try {
         mostrarLoading(true);
         
+        const sessionToken = localStorage.getItem('session_token');
+        if (!sessionToken) {
+            alert('❌ Sessão expirada. Faça login novamente.');
+            window.location.href = 'login.html';
+            return;
+        }
+        
         const formData = {
-            nome: document.getElementById('cliente-nome').value,
-            email: document.getElementById('cliente-email').value || null,
-            telefone: document.getElementById('cliente-telefone').value,
-            cpf: document.getElementById('cliente-cpf').value || null,
-            endereco: document.getElementById('cliente-endereco').value || null,
-            cidade: document.getElementById('cliente-cidade').value || null,
-            estado: document.getElementById('cliente-estado').value || null,
-            observacoes: document.getElementById('cliente-observacoes').value || null,
-            ativo: document.getElementById('cliente-status').checked
+            nome: document.getElementById('cliente-nome').value.trim(),
+            email: document.getElementById('cliente-email').value.trim() || null,
+            telefone: document.getElementById('cliente-telefone').value.trim(),
+            cpf: document.getElementById('cliente-cpf').value.trim() || null,
+            endereco: document.getElementById('cliente-endereco').value.trim() || null,
+            cidade: document.getElementById('cliente-cidade').value.trim() || null,
+            estado: document.getElementById('cliente-estado').value.trim() || null,
+            observacoes: document.getElementById('cliente-observacoes').value.trim() || null,
+            ativo: document.getElementById('cliente-status').checked,
+            // Campos adicionais que podem estar no formulário
+            celular: null,
+            data_nascimento: null,
+            numero: null,
+            complemento: null,
+            bairro: null,
+            cep: null
         };
         
-        const sessionToken = localStorage.getItem('session_token');
         let url = 'http://localhost:8001/api/clientes';
         let method = 'POST';
         
@@ -349,6 +406,8 @@ async function salvarCliente() {
             url += `/${clienteEditando.id}`;
             method = 'PUT';
         }
+        
+        console.log(`🔗 Enviando dados para: ${url}`, formData);
         
         const response = await fetch(url, {
             method: method,
@@ -360,21 +419,31 @@ async function salvarCliente() {
         });
         
         if (!response.ok) {
-            throw new Error(`Erro HTTP: ${response.status}`);
+            const errorText = await response.text();
+            console.error(`❌ Erro HTTP ${response.status}:`, errorText);
+            
+            if (response.status === 400) {
+                const errorData = JSON.parse(errorText);
+                alert(`Erro: ${errorData.detail}`);
+                return;
+            }
+            
+            throw new Error(`Erro HTTP: ${response.status} - ${errorText}`);
         }
         
         const resultado = await response.json();
+        console.log('✅ Cliente salvo com sucesso:', resultado);
         
         // Salvar também localmente como backup
         salvarClienteLocal(formData, clienteEditando?.id);
         
-        alert(`Cliente ${clienteEditando ? 'atualizado' : 'cadastrado'} com sucesso!`);
+        alert(`✅ Cliente ${clienteEditando ? 'atualizado' : 'cadastrado'} com sucesso!`);
         fecharModalCliente();
         carregarClientes();
         
     } catch (error) {
         console.error('❌ Erro ao salvar cliente:', error);
-        alert('Erro ao salvar cliente. Verifique o console para mais detalhes.');
+        alert('❌ Erro ao salvar cliente. Verifique o console para mais detalhes.');
     } finally {
         mostrarLoading(false);
     }

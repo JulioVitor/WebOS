@@ -1,5 +1,6 @@
 // Configurações da API
-const API_BASE = 'http://172.19.90.223:8001';
+const API_BASE ='http://localhost:8001';
+const API_BASE_URL = `${API_BASE}/api`;
 
 // Elementos do DOM
 let loginForm = null;
@@ -126,6 +127,10 @@ async function fazerLogin(nome, password) {
             }
             if (data.user_id) {
                 localStorage.setItem('user_id', data.user_id);
+            }
+
+            if (data.perfil) {
+                localStorage.setItem('user_perfil', data.perfil);
             }
             
             alert('✅ Login realizado com sucesso! Redirecionando...');
